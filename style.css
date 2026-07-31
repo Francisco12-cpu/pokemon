@@ -1,0 +1,82 @@
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
+html,body { width:100%; height:100%; overflow:hidden; background:#0a0a14; font-family:'VT323',monospace; color:#f0f0f0; touch-action:manipulation; display:flex; justify-content:center; align-items:center; }
+#app { width:100%; height:100%; max-width:420px; position:relative; display:flex; flex-direction:column; background:linear-gradient(180deg,#1a1a2e 0%,#16213e 100%); box-shadow:0 0 30px rgba(0,0,0,0.8); overflow:hidden; }
+@media(min-width:421px) { #app { border-radius:12px; height:90vh; max-height:820px; } }
+.screen { position:absolute; inset:0; display:none; flex-direction:column; justify-content:center; align-items:center; padding:16px; gap:14px; overflow-y:auto; }
+.screen.active { display:flex; }
+.pixel-title { font-family:'Press Start 2P',monospace; font-size:clamp(12px,4vw,16px); color:#ffcc00; text-shadow:3px 3px 0 #000; text-align:center; line-height:1.6; letter-spacing:2px; }
+.btn { font-family:'Press Start 2P',monospace; font-size:10px; padding:14px 20px; border:3px solid #ffcc00; background:#1e1e3a; color:#ffcc00; border-radius:4px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; transition:all 0.1s; text-shadow:2px 2px 0 #000; box-shadow:3px 3px 0 #000; width:auto; min-width:200px; text-align:center; touch-action:manipulation; }
+.btn:active { transform:translate(2px,2px); box-shadow:1px 1px 0 #000; background:#2a2a4a; }
+.btn:disabled { opacity:0.4; pointer-events:none; }
+.btn-back { background:#3a1e1e; border-color:#cc4444; color:#cc4444; font-size:9px; padding:10px 16px; min-width:auto; }
+.overlay { position:absolute; inset:0; background:rgba(0,0,0,0.92); display:flex; justify-content:center; align-items:center; z-index:100; flex-direction:column; gap:20px; }
+.overlay.hidden { display:none; }
+.overlay-content { text-align:center; color:#ffcc00; font-family:'Press Start 2P',monospace; font-size:12px; line-height:1.8; }
+.intro-content { display:flex; flex-direction:column; align-items:center; gap:30px; }
+.roster-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-width:340px; width:100%; max-height:45vh; overflow-y:auto; padding:8px; background:rgba(255,255,255,0.03); border-radius:8px; }
+.pokemon-card { background:#1e1e3a; border:2px solid #333366; border-radius:6px; padding:6px; text-align:center; cursor:pointer; transition:all 0.15s; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.pokemon-card.selected { border-color:#ffcc00; box-shadow:0 0 8px #ffcc00; background:#2a2a4a; }
+.pokemon-card img { width:56px; height:56px; image-rendering:pixelated; }
+.pokemon-card span { font-family:'Press Start 2P',monospace; font-size:6px; color:#ddd; }
+.pokemon-card small { font-size:10px; color:#aaa; font-family:'VT323',monospace; }
+.select-actions { display:flex; flex-direction:column; gap:8px; align-items:center; }
+#team-count { font-family:'Press Start 2P',monospace; font-size:9px; color:#ffcc00; }
+.search-box { font-family:'Press Start 2P',monospace; font-size:9px; padding:10px 14px; border:3px solid #ffcc00; background:#1a1a2e; color:#ffcc00; border-radius:4px; text-align:center; width:240px; outline:none; }
+.search-box::placeholder { color:#666; }
+#search-result-container img { width:80px; height:80px; image-rendering:pixelated; }
+#move-filter-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; }
+#search-type-filter { font-family:'Press Start 2P',monospace; font-size:8px; padding:6px; background:#1e1e3a; color:#ffcc00; border:2px solid #ffcc00; border-radius:4px; }
+#search-moves-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:5px; max-width:300px; width:100%; max-height:25vh; overflow-y:auto; }
+.move-chip { font-family:'VT323',monospace; font-size:12px; background:#1e1e3a; border:2px solid #444; padding:5px 6px; border-radius:4px; cursor:pointer; color:#ccc; transition:all 0.15s; text-align:center; }
+.move-chip.selected { border-color:#ffcc00; background:#2a2a4a; color:#ffcc00; }
+#room-qr-display { background:#fff; padding:14px; border-radius:8px; display:inline-flex; flex-direction:column; align-items:center; gap:8px; }
+#room-qr-display p { font-family:'Press Start 2P',monospace; font-size:8px; color:#000; }
+#qr-canvas { width:180px; height:180px; }
+#qr-scanner-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; }
+#qr-scanner-video { width:220px; height:220px; border:3px solid #ffcc00; border-radius:8px; background:#000; object-fit:cover; }
+#qr-scanner-wrap p { font-family:'Press Start 2P',monospace; font-size:7px; color:#ccc; text-align:center; }
+.battle-field { display:flex; flex-direction:column; gap:12px; width:100%; max-width:340px; }
+.mon-container { display:flex; align-items:center; gap:10px; padding:8px; border-radius:8px; background:rgba(255,255,255,0.05); border:2px solid #333; }
+.mon-container.rival { flex-direction:row-reverse; text-align:right; }
+.mon-container .sprite { width:64px; height:64px; image-rendering:pixelated; }
+.mon-container .info { flex:1; display:flex; flex-direction:column; gap:3px; }
+.mon-container .name { font-family:'Press Start 2P',monospace; font-size:7px; color:#ffcc00; }
+.hp-bar { width:100%; height:10px; background:#333; border-radius:3px; overflow:hidden; border:1px solid #555; }
+.hp-fill { height:100%; background:linear-gradient(90deg,#4caf50,#8bc34a); transition:width 0.4s ease; width:100%; }
+.hp-fill.low { background:linear-gradient(90deg,#f44336,#ff5722); }
+.hp-text { font-family:'VT323',monospace; font-size:14px; color:#ddd; }
+.status { font-family:'Press Start 2P',monospace; font-size:6px; color:#ff9933; text-shadow:1px 1px 0 #000; }
+.battle-log { width:100%; max-width:340px; height:80px; overflow-y:auto; background:rgba(0,0,0,0.6); border:2px solid #333; border-radius:6px; padding:6px; font-family:'VT323',monospace; font-size:14px; color:#ddd; line-height:1.3; }
+.battle-log p { margin:1px 0; padding:1px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+.battle-controls { display:flex; flex-direction:column; gap:8px; width:100%; max-width:340px; }
+.moves-row { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.moves-row .btn { min-width:auto; font-size:8px; padding:10px 6px; display:flex; flex-direction:column; gap:2px; line-height:1.4; }
+.moves-row .btn .move-dmg { font-family:'VT323',monospace; font-size:11px; color:#9fd8ff; text-shadow:none; text-transform:none; letter-spacing:0; }
+#switch-menu { position:absolute; bottom:0; left:0; width:100%; background:rgba(0,0,0,0.95); padding:16px; display:flex; flex-direction:column; gap:6px; z-index:50; border-top:3px solid #ffcc00; }
+#switch-menu.hidden { display:none; }
+.switch-option { font-family:'Press Start 2P',monospace; font-size:8px; padding:10px; background:#1e1e3a; border:2px solid #ffcc00; color:#ffcc00; border-radius:4px; cursor:pointer; text-align:left; display:flex; align-items:center; gap:8px; }
+.player-label { font-family:'Press Start 2P',monospace; font-size:8px; color:#ffcc00; text-align:center; margin-top:4px; }
+@keyframes flip-turn { 0%{transform:perspective(600px) rotateY(0deg);} 50%{transform:perspective(600px) rotateY(90deg);} 100%{transform:perspective(600px) rotateY(0deg);} }
+.flipping { animation:flip-turn 0.4s ease-in-out; }
+#screen-victory .pixel-title { color:#4caf50; font-size:clamp(16px,6vw,22px); }
+#screen-defeat .pixel-title { color:#f44336; font-size:clamp(16px,6vw,22px); }
+
+/* ===== NOVO: splash de carregamento do motor ===== */
+#boot-splash { position:absolute; inset:0; z-index:200; background:#0a0a14; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; }
+#boot-splash.hidden { display:none; }
+#boot-splash p { font-family:'Press Start 2P',monospace; font-size:10px; color:#ffcc00; text-align:center; padding:0 20px; }
+.spinner { width:36px; height:36px; border:4px solid #333; border-top-color:#ffcc00; border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+#boot-splash.error .spinner { display:none; }
+#boot-splash .retry-btn { display:none; }
+#boot-splash.error .retry-btn { display:inline-block; }
+
+/* ===== NOVO: indicador offline ===== */
+#offline-banner { position:absolute; top:0; left:0; width:100%; background:#3a1e1e; color:#ff9933; font-family:'VT323',monospace; font-size:13px; text-align:center; padding:4px; z-index:150; border-bottom:2px solid #cc4444; display:none; }
+#offline-banner.show { display:block; }
+
+/* ===== NOVO: toasts (substituem alert()) ===== */
+#toast-container { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); z-index:300; display:flex; flex-direction:column; gap:6px; align-items:center; width:100%; padding:0 16px; pointer-events:none; }
+.toast { background:#1e1e3a; border:2px solid #ffcc00; color:#ffcc00; font-family:'VT323',monospace; font-size:14px; padding:8px 14px; border-radius:6px; box-shadow:3px 3px 0 #000; max-width:340px; text-align:center; animation:toast-in 0.2s ease; }
+.toast.error { border-color:#cc4444; color:#ff9999; }
+@keyframes toast-in { from{ opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
